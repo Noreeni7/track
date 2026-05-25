@@ -64,6 +64,7 @@
       font-size: 1rem;
       cursor: pointer;
       transition: transform 0.2s ease, opacity 0.2s ease;
+      width: 100%;
     }
 
     button:hover {
@@ -130,10 +131,6 @@
       font-size: 0.95rem;
       line-height: 1.8;
     }
-
-    .hidden {
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -145,9 +142,19 @@
     </p>
 
     <div id="mainScreen">
-      <p class="question">Why are you opening social media?</p>
+      <p class="question">Which app are you opening?</p>
 
       <div class="buttons">
+        <button class="intent-btn" onclick="setApp('instagram')">
+          Instagram
+        </button>
+
+        <button class="intent-btn" onclick="setApp('x')">
+          X (Twitter)
+        </button>
+      </div>
+
+      <div class="buttons" style="margin-top:20px;">
         <button class="intent-btn" onclick="startFlow('Messaging someone')">
           Messaging someone
         </button>
@@ -165,7 +172,7 @@
         </button>
       </div>
 
-      <div class="stats" id="statsBox">
+      <div class="stats">
         <strong>Today</strong><br>
         Opens: <span id="openCount">0</span><br>
         Mindless selections: <span id="mindlessCount">0</span>
@@ -181,12 +188,8 @@
         Are you choosing this intentionally?
       </p>
 
-      <button class="continue-btn" id="continueBtn" onclick="openInstagram()">
-        Continue to Instagram
-      </button>
-
-      <button class="continue-btn" id="continueBtn" onclick="openX()">
-        Continue to X
+      <button class="continue-btn" id="continueBtn" onclick="openApp()">
+        Continue
       </button>
 
       <button class="back-btn" id="backBtn" onclick="goBack()">
@@ -201,6 +204,7 @@
 
   <script>
     let countdownInterval;
+    let selectedApp = 'instagram';
 
     const reflections = [
       'What do you hope to feel after opening the app?',
@@ -209,6 +213,10 @@
       'You can still continue — just consciously.',
       'A pause breaks autopilot.'
     ];
+
+    function setApp(app) {
+      selectedApp = app;
+    }
 
     function loadStats() {
       const opens = localStorage.getItem('opens') || 0;
@@ -222,7 +230,7 @@
       document.getElementById('reflectionBox').style.display = 'block';
 
       document.getElementById('selectedIntent').innerHTML =
-        `<strong>${intent}</strong>`;
+        `<strong>${selectedApp.toUpperCase()} - ${intent}</strong>`;
 
       const randomReflection = reflections[
         Math.floor(Math.random() * reflections.length)
@@ -231,7 +239,6 @@
       document.getElementById('reflectionText').innerText = randomReflection;
 
       let count = 5;
-
       document.getElementById('countdown').innerText = count;
 
       document.getElementById('continueBtn').style.display = 'none';
@@ -241,12 +248,10 @@
 
       countdownInterval = setInterval(() => {
         count--;
-
         document.getElementById('countdown').innerText = count;
 
         if (count <= 0) {
           clearInterval(countdownInterval);
-
           document.getElementById('countdown').innerText = '✓';
 
           document.getElementById('continueBtn').style.display = 'block';
@@ -267,20 +272,16 @@
       loadStats();
     }
 
-    function openInstagram() {
-      window.location.href = 'instagram://';
+    function openApp() {
+      if (selectedApp === 'instagram') {
+        window.location.href = 'instagram://';
+        setTimeout(() => window.location.href = 'https://instagram.com', 1000);
+      }
 
-      setTimeout(() => {
-        window.location.href = 'https://instagram.com';
-      }, 1000);
-    }
-
-    function openX() {
-      window.location.href = 'x://';
-
-      setTimeout(() => {
-        window.location.href = 'https://x.com';
-      }, 1000);
+      if (selectedApp === 'x') {
+        window.location.href = 'x://';
+        setTimeout(() => window.location.href = 'https://x.com', 1000);
+      }
     }
 
     function goBack() {
