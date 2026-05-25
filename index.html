@@ -3,191 +3,279 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Intent Gateway Mode</title>
+  <title>Launcher</title>
 
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
     body {
-      background:#0b1220;
-      color:white;
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      padding:20px;
+      background: #0f172a;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
     .container {
-      width:100%; max-width:420px;
-      background:#111827;
-      border-radius:24px;
-      padding:28px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.4);
+      width: 100%;
+      max-width: 420px;
+      background: #111827;
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
-    h1 { text-align:center; margin-bottom:8px; }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
 
     .subtitle {
-      text-align:center;
-      color:#94a3b8;
-      margin-bottom:20px;
-      font-size:0.95rem;
+      text-align: center;
+      color: #94a3b8;
+      margin-bottom: 30px;
+      line-height: 1.5;
     }
 
-    .card {
-      background:#0f172a;
-      border:1px solid #1e293b;
-      border-radius:16px;
-      padding:16px;
-      margin-top:12px;
+    .question {
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     button {
-      width:100%;
-      border:none;
-      padding:14px;
-      border-radius:14px;
-      margin-top:10px;
-      font-size:1rem;
-      cursor:pointer;
+      border: none;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    .ig {
-      background:#E1306C;
-      color:white;
-      font-weight:bold;
+    button:hover {
+      transform: scale(1.02);
     }
 
-    .secondary {
-      background:#1e293b;
-      color:white;
+    .intent-btn {
+      background: #1e293b;
+      color: white;
     }
 
-    .danger {
-      background:#ef4444;
-      color:white;
+    .intent-btn:hover {
+      opacity: 0.9;
     }
 
-    .timer {
-      font-size:2.5rem;
-      text-align:center;
-      margin:10px 0;
-      font-weight:bold;
+    .continue-btn {
+      background: #22c55e;
+      color: black;
+      margin-top: 20px;
+      display: none;
     }
 
-    .small {
-      color:#94a3b8;
-      text-align:center;
-      font-size:0.9rem;
+    .back-btn {
+      background: transparent;
+      border: 1px solid #334155;
+      color: white;
+      margin-top: 12px;
+      display: none;
     }
 
-    input {
-      width:100%;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid #334155;
-      background:#0b1220;
-      color:white;
-      margin-top:10px;
+    .reflection-box {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 25px;
+      display: none;
+      text-align: center;
+    }
+
+    .countdown {
+      font-size: 3rem;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+
+    .small-text {
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .footer {
+      margin-top: 25px;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .stats {
+      margin-top: 20px;
+      padding: 15px;
+      background: #0f172a;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Intent</h1>
 
-<div class="container">
-  <h1>Intent Gateway</h1>
-  <p class="subtitle">Pause before autopilot</p>
+    <p class="subtitle">
+      A conscious doorway before scrolling.
+    </p>
 
-  <div class="card">
-    <div class="small">Daily opens</div>
-    <div id="opens">0</div>
+    <div id="mainScreen">
+      <p class="question">Why are you opening social media?</p>
 
-    <div class="small" style="margin-top:10px;">Mindless opens</div>
-    <div id="mindless">0</div>
+      <div class="buttons">
+        <button class="intent-btn" onclick="startFlow('Messaging someone')">
+          Messaging someone
+        </button>
+
+        <button class="intent-btn" onclick="startFlow('Checking notifications')">
+          Checking notifications
+        </button>
+
+        <button class="intent-btn" onclick="startFlow('Looking for information')">
+          Looking for information
+        </button>
+
+        <button class="intent-btn" onclick="startFlow('Mindless scrolling')">
+          Mindless scrolling
+        </button>
+      </div>
+
+      <div class="stats" id="statsBox">
+        <strong>Today</strong><br>
+        Opens: <span id="openCount">0</span><br>
+        Mindless selections: <span id="mindlessCount">0</span>
+      </div>
+    </div>
+
+    <div class="reflection-box" id="reflectionBox">
+      <p id="selectedIntent"></p>
+
+      <div class="countdown" id="countdown">5</div>
+
+      <p class="small-text" id="reflectionText">
+        Are you choosing this intentionally?
+      </p>
+
+      <button class="continue-btn" id="continueBtn" onclick="openInstagram()">
+        Continue to Instagram
+      </button>
+
+      <button class="back-btn" id="backBtn" onclick="goBack()">
+        Never mind
+      </button>
+    </div>
+
+    <div class="footer">
+      The goal is awareness, not perfection.
+    </div>
   </div>
 
-  <div class="card">
-    <div class="small">Why are you opening Instagram?</div>
+  <script>
+    let countdownInterval;
 
-    <input id="reason" placeholder="Type your reason (optional)" />
+    const reflections = [
+      'What do you hope to feel after opening the app?',
+      'Will this make you feel better or just distracted?',
+      'Are you bored, tired, or avoiding something?',
+      'You can still continue — just consciously.',
+      'A pause breaks autopilot.'
+    ];
 
-    <button class="ig" onclick="startGateway()">Open Instagram</button>
-  </div>
+    function loadStats() {
+      const opens = localStorage.getItem('opens') || 0;
+      const mindless = localStorage.getItem('mindless') || 0;
 
-  <div class="card" id="gate" style="display:none;">
-    <div class="small" id="prompt">Think before you continue</div>
-
-    <div class="timer" id="timer">5</div>
-
-    <button class="secondary" id="continueBtn" style="display:none;" onclick="openIG()">Continue</button>
-    <button class="danger" onclick="cancel()">Cancel</button>
-  </div>
-
-</div>
-
-<script>
-let t;
-let count = 5;
-
-function load() {
-  document.getElementById('opens').innerText = localStorage.getItem('opens') || 0;
-  document.getElementById('mindless').innerText = localStorage.getItem('mindless') || 0;
-}
-
-function startGateway() {
-  document.getElementById('gate').style.display = 'block';
-
-  let reason = document.getElementById('reason').value;
-
-  if (!reason) reason = "No reason given";
-
-  localStorage.setItem('lastReason', reason);
-
-  count = 5;
-  document.getElementById('timer').innerText = count;
-  document.getElementById('continueBtn').style.display = 'none';
-
-  clearInterval(t);
-
-  t = setInterval(() => {
-    count--;
-    document.getElementById('timer').innerText = count;
-
-    if (count <= 0) {
-      clearInterval(t);
-      document.getElementById('timer').innerText = "✓";
-      document.getElementById('continueBtn').style.display = 'block';
+      document.getElementById('openCount').innerText = opens;
+      document.getElementById('mindlessCount').innerText = mindless;
     }
-  }, 1000);
 
-  let opens = parseInt(localStorage.getItem('opens') || 0);
-  opens++;
-  localStorage.setItem('opens', opens);
+    function startFlow(intent) {
+      document.getElementById('reflectionBox').style.display = 'block';
 
-  if (reason.toLowerCase().includes("mindless")) {
-    let m = parseInt(localStorage.getItem('mindless') || 0);
-    m++;
-    localStorage.setItem('mindless', m);
-  }
+      document.getElementById('selectedIntent').innerHTML =
+        `<strong>${intent}</strong>`;
 
-  load();
-}
+      const randomReflection = reflections[
+        Math.floor(Math.random() * reflections.length)
+      ];
 
-function openIG() {
-  window.location.href = "instagram://";
+      document.getElementById('reflectionText').innerText = randomReflection;
 
-  setTimeout(() => {
-    window.location.href = "https://instagram.com";
-  }, 1000);
-}
+      let count = 5;
 
-function cancel() {
-  document.getElementById('gate').style.display = 'none';
-}
+      document.getElementById('countdown').innerText = count;
 
-load();
-</script>
+      document.getElementById('continueBtn').style.display = 'none';
+      document.getElementById('backBtn').style.display = 'none';
 
+      clearInterval(countdownInterval);
+
+      countdownInterval = setInterval(() => {
+        count--;
+
+        document.getElementById('countdown').innerText = count;
+
+        if (count <= 0) {
+          clearInterval(countdownInterval);
+
+          document.getElementById('countdown').innerText = '✓';
+
+          document.getElementById('continueBtn').style.display = 'block';
+          document.getElementById('backBtn').style.display = 'block';
+        }
+      }, 1000);
+
+      let opens = parseInt(localStorage.getItem('opens') || 0);
+      opens++;
+      localStorage.setItem('opens', opens);
+
+      if (intent === 'Mindless scrolling') {
+        let mindless = parseInt(localStorage.getItem('mindless') || 0);
+        mindless++;
+        localStorage.setItem('mindless', mindless);
+      }
+
+      loadStats();
+    }
+
+    function openInstagram() {
+      window.location.href = 'instagram://';
+
+      setTimeout(() => {
+        window.location.href = 'https://instagram.com';
+      }, 1000);
+    }
+
+    function goBack() {
+      document.getElementById('reflectionBox').style.display = 'none';
+    }
+
+    loadStats();
+  </script>
 </body>
 </html>
