@@ -84,7 +84,8 @@
       background: #22c55e;
       color: black;
       margin-top: 20px;
-      display: none;
+      display: inline-block;
+      width: 100%;
     }
 
     .back-btn {
@@ -92,7 +93,7 @@
       border: 1px solid #334155;
       color: white;
       margin-top: 12px;
-      display: none;
+      width: 100%;
     }
 
     .reflection-box {
@@ -116,13 +117,6 @@
       line-height: 1.5;
     }
 
-    .footer {
-      margin-top: 25px;
-      text-align: center;
-      color: #64748b;
-      font-size: 0.9rem;
-    }
-
     .stats {
       margin-top: 20px;
       padding: 15px;
@@ -134,161 +128,115 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Intent</h1>
 
-    <p class="subtitle">
-      A conscious doorway before scrolling.
-    </p>
+<div class="container">
+  <h1>Intent</h1>
 
-    <div id="mainScreen">
-      <p class="question">Which app are you opening?</p>
+  <p class="subtitle">A conscious doorway before scrolling.</p>
 
-      <div class="buttons">
-        <button class="intent-btn" onclick="setApp('instagram')">
-          Instagram
-        </button>
+  <div id="mainScreen">
+    <p class="question">Which app are you opening?</p>
 
-        <button class="intent-btn" onclick="setApp('x')">
-          X (Twitter)
-        </button>
-      </div>
-
-      <div class="buttons" style="margin-top:20px;">
-        <button class="intent-btn" onclick="startFlow('Messaging someone')">
-          Messaging someone
-        </button>
-
-        <button class="intent-btn" onclick="startFlow('Checking notifications')">
-          Checking notifications
-        </button>
-
-        <button class="intent-btn" onclick="startFlow('Looking for information')">
-          Looking for information
-        </button>
-
-        <button class="intent-btn" onclick="startFlow('Mindless scrolling')">
-          Mindless scrolling
-        </button>
-      </div>
-
-      <div class="stats">
-        <strong>Today</strong><br>
-        Opens: <span id="openCount">0</span><br>
-        Mindless selections: <span id="mindlessCount">0</span>
-      </div>
+    <div class="buttons">
+      <button class="intent-btn" onclick="setApp('instagram')">Instagram</button>
+      <button class="intent-btn" onclick="setApp('x')">X (Twitter)</button>
     </div>
 
-    <div class="reflection-box" id="reflectionBox">
-      <p id="selectedIntent"></p>
-
-      <div class="countdown" id="countdown">10</div>
-
-      <p class="small-text" id="reflectionText">
-        Are you choosing this intentionally?
-      </p>
-
-      <button class="continue-btn" id="continueBtn" onclick="openApp()">
-        Continue
-      </button>
-
-      <button class="back-btn" id="backBtn" onclick="goBack()">
-        Never mind
-      </button>
+    <div class="buttons" style="margin-top:20px;">
+      <button class="intent-btn" onclick="startFlow('Messaging someone')">Messaging someone</button>
+      <button class="intent-btn" onclick="startFlow('Checking notifications')">Checking notifications</button>
+      <button class="intent-btn" onclick="startFlow('Looking for information')">Looking for information</button>
+      <button class="intent-btn" onclick="startFlow('Mindless scrolling')">Mindless scrolling</button>
     </div>
 
-    <div class="footer">
-      The goal is awareness, not perfection.
+    <div class="stats">
+      <strong>Today</strong><br>
+      Opens: <span id="openCount">0</span><br>
+      Mindless selections: <span id="mindlessCount">0</span>
     </div>
   </div>
 
-  <script>
-    let countdownInterval;
-    let selectedApp = 'instagram';
+  <div class="reflection-box" id="reflectionBox">
+    <p id="selectedIntent"></p>
 
-    const reflections = [
-      'What do you hope to feel after opening the app?',
-      'Will this make you feel better or just distracted?',
-      'Are you bored, tired, or avoiding something?',
-      'You can still continue — just consciously.',
-      'A pause breaks autopilot.'
-    ];
+    <div class="countdown" id="countdown">10</div>
 
-    function setApp(app) {
-      selectedApp = app;
-    }
+    <p class="small-text" id="reflectionText">Are you choosing this intentionally?</p>
 
-    function loadStats() {
-      const opens = localStorage.getItem('opens') || 0;
-      const mindless = localStorage.getItem('mindless') || 0;
+    <button class="continue-btn" onclick="openInstagram()">Continue to Instagram</button>
+    <button class="continue-btn" onclick="openX()">Continue to X</button>
 
-      document.getElementById('openCount').innerText = opens;
-      document.getElementById('mindlessCount').innerText = mindless;
-    }
+    <button class="back-btn" onclick="goBack()">Never mind</button>
+  </div>
 
-    function startFlow(intent) {
-      document.getElementById('reflectionBox').style.display = 'block';
+  <div style="text-align:center; margin-top:20px; color:#64748b;">
+    The goal is awareness, not perfection.
+  </div>
+</div>
 
-      document.getElementById('selectedIntent').innerHTML =
-        `<strong>${selectedApp.toUpperCase()} - ${intent}</strong>`;
+<script>
+let countdownInterval;
+let selectedApp = 'instagram';
 
-      const randomReflection = reflections[
-        Math.floor(Math.random() * reflections.length)
-      ];
+const reflections = [
+  'What do you hope to feel after opening the app?',
+  'Will this make you feel better or just distracted?',
+  'Are you bored, tired, or avoiding something?',
+  'You can still continue — just consciously.',
+  'A pause breaks autopilot.'
+];
 
-      document.getElementById('reflectionText').innerText = randomReflection;
+function setApp(app) {
+  selectedApp = app;
+}
 
-      let count = 5;
-      document.getElementById('countdown').innerText = count;
+function startFlow(intent) {
+  document.getElementById('reflectionBox').style.display = 'block';
 
-      document.getElementById('continueBtn').style.display = 'none';
-      document.getElementById('backBtn').style.display = 'none';
+  document.getElementById('selectedIntent').innerHTML =
+    `<strong>${selectedApp.toUpperCase()} - ${intent}</strong>`;
 
+  document.getElementById('reflectionText').innerText =
+    reflections[Math.floor(Math.random() * reflections.length)];
+
+  let count = 5;
+  document.getElementById('countdown').innerText = count;
+
+  clearInterval(countdownInterval);
+
+  countdownInterval = setInterval(() => {
+    count--;
+    document.getElementById('countdown').innerText = count;
+
+    if (count <= 0) {
       clearInterval(countdownInterval);
-
-      countdownInterval = setInterval(() => {
-        count--;
-        document.getElementById('countdown').innerText = count;
-
-        if (count <= 0) {
-          clearInterval(countdownInterval);
-          document.getElementById('countdown').innerText = '✓';
-
-          document.getElementById('continueBtn').style.display = 'block';
-          document.getElementById('backBtn').style.display = 'block';
-        }
-      }, 1000);
-
-      let opens = parseInt(localStorage.getItem('opens') || 0);
-      opens++;
-      localStorage.setItem('opens', opens);
-
-      if (intent === 'Mindless scrolling') {
-        let mindless = parseInt(localStorage.getItem('mindless') || 0);
-        mindless++;
-        localStorage.setItem('mindless', mindless);
-      }
-
-      loadStats();
+      document.getElementById('countdown').innerText = '✓';
     }
+  }, 1000);
 
-    function openApp() {
-      if (selectedApp === 'instagram') {
-        window.location.href = 'instagram://';
-        setTimeout(() => window.location.href = 'https://instagram.com', 1000);
-      }
+  let opens = parseInt(localStorage.getItem('opens') || 0);
+  localStorage.setItem('opens', ++opens);
 
-      if (selectedApp === 'x') {
-        window.location.href = 'x://';
-        setTimeout(() => window.location.href = 'https://x.com', 1000);
-      }
-    }
+  if (intent === 'Mindless scrolling') {
+    let mindless = parseInt(localStorage.getItem('mindless') || 0);
+    localStorage.setItem('mindless', ++mindless);
+  }
+}
 
-    function goBack() {
-      document.getElementById('reflectionBox').style.display = 'none';
-    }
+function openInstagram() {
+  window.location.href = 'instagram://';
+  setTimeout(() => window.location.href = 'https://instagram.com', 1000);
+}
 
-    loadStats();
-  </script>
+function openX() {
+  window.location.href = 'x://';
+  setTimeout(() => window.location.href = 'https://x.com', 1000);
+}
+
+function goBack() {
+  document.getElementById('reflectionBox').style.display = 'none';
+}
+</script>
+
 </body>
 </html>
