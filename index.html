@@ -1,282 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Launcher</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Launcher</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #0f172a;
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 420px;
-      background: #111827;
-      border-radius: 24px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 10px;
-      font-size: 2rem;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #94a3b8;
-      margin-bottom: 30px;
-      line-height: 1.5;
-    }
-
-    .question {
-      margin-bottom: 20px;
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    button {
-      border: none;
-      border-radius: 16px;
-      padding: 16px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-
-    button:hover {
-      transform: scale(1.02);
-    }
-
-    .intent-btn {
-      background: #1e293b;
-      color: white;
-    }
-
-    .intent-btn:hover {
-      opacity: 0.9;
-    }
-
-    .continue-btn {
-      background: #22c55e;
-      color: black;
-      margin-top: 20px;
-      display: none;
-    }
-
-    .back-btn {
-      background: transparent;
-      border: 1px solid #334155;
-      color: white;
-      margin-top: 12px;
-      display: none;
-    }
-
-    .reflection-box {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 16px;
-      padding: 20px;
-      margin-top: 25px;
-      display: none;
-      text-align: center;
-    }
-
-    .countdown {
-      font-size: 3rem;
-      margin: 15px 0;
-      font-weight: bold;
-    }
-
-    .small-text {
-      color: #94a3b8;
-      line-height: 1.5;
-    }
-
-    .footer {
-      margin-top: 25px;
-      text-align: center;
-      color: #64748b;
-      font-size: 0.9rem;
-    }
-
-    .stats {
-      margin-top: 20px;
-      padding: 15px;
-      background: #0f172a;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      line-height: 1.8;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Intent</h1>
-
-    <p class="subtitle">
-      A conscious doorway before scrolling.
-    </p>
-
-    <div id="mainScreen">
-      <p class="question">Why are you opening social media?</p>
-
-      <div class="buttons">
-        <button class="intent-btn" onclick="startFlow('Messaging someone')">
-          Messaging someone
-        </button>
-
-        <button class="intent-btn" onclick="startFlow('Checking notifications')">
-          Checking notifications
-        </button>
-
-        <button class="intent-btn" onclick="startFlow('Looking for information')">
-          Looking for information
-        </button>
-
-        <button class="intent-btn" onclick="startFlow('Mindless scrolling')">
-          Mindless scrolling
-        </button>
-      </div>
-
-      <div class="stats" id="statsBox">
-        <strong>Today</strong><br>
-        Opens: <span id="openCount">0</span><br>
-        Mindless selections: <span id="mindlessCount">0</span>
-      </div>
-    </div>
-
-    <div class="reflection-box" id="reflectionBox">
-      <p id="selectedIntent"></p>
-
-      <div class="countdown" id="countdown">10</div>
-
-      <p class="small-text" id="reflectionText">
-        Are you choosing this intentionally?
-      </p>
-
-      <button class="continue-btn" id="continueBtn" onclick="openInstagram()">
-        Continue to Instagram
-      </button>
-
-      <button class="back-btn" id="backBtn" onclick="goBack()">
-        Never mind
-      </button>
-    </div>
-
-    <div class="footer">
-      The goal is awareness, not perfection.
-    </div>
-  </div>
-
-  <script>
-    let countdownInterval;
-
-    const reflections = [
-      'What do you hope to feel after opening the app?',
-      'Will this make you feel better or just distracted?',
-      'Are you bored, tired, or avoiding something?',
-      'You can still continue — just consciously.',
-      'A pause breaks autopilot.'
-    ];
-
-    function loadStats() {
-      const opens = localStorage.getItem('opens') || 0;
-      const mindless = localStorage.getItem('mindless') || 0;
-
-      document.getElementById('openCount').innerText = opens;
-      document.getElementById('mindlessCount').innerText = mindless;
-    }
-
-    function startFlow(intent) {
-      document.getElementById('reflectionBox').style.display = 'block';
-
-      document.getElementById('selectedIntent').innerHTML =
-        `<strong>${intent}</strong>`;
-
-      const randomReflection = reflections[
-        Math.floor(Math.random() * reflections.length)
-      ];
-
-      document.getElementById('reflectionText').innerText = randomReflection;
-
-      let count = 10;
-
-      document.getElementById('countdown').innerText = count;
-
-      document.getElementById('continueBtn').style.display = 'none';
-      document.getElementById('backBtn').style.display = 'none';
-
-      clearInterval(countdownInterval);
-
-      countdownInterval = setInterval(() => {
-        count--;
-
-        document.getElementById('countdown').innerText = count;
-
-        if (count <= 0) {
-          clearInterval(countdownInterval);
-
-          document.getElementById('countdown').innerText = '✓';
-
-          document.getElementById('continueBtn').style.display = 'block';
-          document.getElementById('backBtn').style.display = 'block';
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
-      }, 1000);
 
-      let opens = parseInt(localStorage.getItem('opens') || 0);
-      opens++;
-      localStorage.setItem('opens', opens);
+        body {
+            background: #0f172a;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-      if (intent === 'Mindless scrolling') {
-        let mindless = parseInt(localStorage.getItem('mindless') || 0);
-        mindless++;
-        localStorage.setItem('mindless', mindless);
-      }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #111827;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
 
-      loadStats();
-    }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
 
-    function openInstagram() {
-      window.location.href = 'instagram://';
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
 
-      setTimeout(() => {
-        window.location.href = 'https://instagram.com';
-      }, 1000);
-    }
+        .question {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button {
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        .intent-btn {
+            background: #1e293b;
+            color: white;
+        }
+
+        .intent-btn:hover {
+            opacity: 0.9;
+        }
+
+        .continue-btn {
+            background: #22c55e;
+            color: black;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid #334155;
+            color: white;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .reflection-box {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 25px;
+            display: none;
+            text-align: center;
+        }
+
+        .countdown {
+            font-size: 3rem;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .small-text {
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .stats {
+            margin-top: 20px;
+            padding: 15px;
+            background: #0f172a;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Intent</h1>
+
+        <p class="subtitle">
+            A conscious doorway before scrolling.
+        </p>
+
+        <div id="mainScreen">
+            <p class="question">Why are you opening social media?</p>
+
+            <div class="buttons">
+                <button class="intent-btn" onclick="startFlow('Messaging someone')">
+                    Messaging someone
+                </button>
+
+                <button class="intent-btn" onclick="startFlow('Checking notifications')">
+                    Checking notifications
+                </button>
+
+                <button class="intent-btn" onclick="startFlow('Looking for information')">
+                    Looking for information
+                </button>
+
+                <button class="intent-btn" onclick="startFlow('Mindless scrolling')">
+                    Mindless scrolling
+                </button>
+            </div>
+
+            <div class="stats" id="statsBox">
+                <strong>Today</strong><br>
+                Opens: <span id="openCount">0</span><br>
+                Mindless selections: <span id="mindlessCount">0</span>
+            </div>
+        </div>
+
+        <div class="reflection-box" id="reflectionBox">
+            <p id="selectedIntent"></p>
+
+            <div class="countdown" id="countdown">10</div>
+
+            <p class="small-text" id="reflectionText">
+                Are you choosing this intentionally?
+            </p>
+
+            <button class="continue-btn" id="instagramBtn" onclick="openInstagram()">
+                Continue to Instagram
+            </button>
+
+            <button class="continue-btn" id="xBtn" onclick="openX()">
+                Continue to X
+            </button>
+
+            <button class="back-btn" id="backBtn" onclick="goBack()">
+                Never mind
+            </button>
+        </div>
+
+        <div class="footer">
+            The goal is awareness, not perfection.
+        </div>
+    </div>
+
+    <script>
+        let countdownInterval;
+
+        const reflections = [
+            'What do you hope to feel after opening the app?',
+            'Will this make you feel better or just distracted?',
+            'Are you bored, tired, or avoiding something?',
+            'You can still continue — just consciously.',
+            'A pause breaks autopilot.'
+        ];
+
+        function loadStats() {
+            const opens = localStorage.getItem('opens') || 0;
+            const mindless = localStorage.getItem('mindless') || 0;
+
+            document.getElementById('openCount').innerText = opens;
+            document.getElementById('mindlessCount').innerText = mindless;
+        }
+
+        function startFlow(intent) {
+            document.getElementById('reflectionBox').style.display = 'block';
+
+            document.getElementById('selectedIntent').innerHTML =
+                `<strong>${intent}</strong>`;
+
+            const randomReflection = reflections[
+                Math.floor(Math.random() * reflections.length)
+            ];
+
+            document.getElementById('reflectionText').innerText = randomReflection;
+
+            let count = 10;
+
+            document.getElementById('countdown').innerText = count;
+
+            document.getElementById('instagramBtn').style.display = 'none';
+            document.getElementById('xBtn').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
+
+            clearInterval(countdownInterval);
+
+            countdownInterval = setInterval(() => {
+                count--;
+
+                document.getElementById('countdown').innerText = count;
+
+                if (count <= 0) {
+                    clearInterval(countdownInterval);
+
+                    document.getElementById('countdown').innerText = '✓';
+
+                    document.getElementById('instagramBtn').style.display = 'block';
+                    document.getElementById('xBtn').style.display = 'block';
+                    document.getElementById('backBtn').style.display = 'block';
+                    document.getElementById('backBtn').style.display = 'block';
+                }
+            }, 1000);
+
+            let opens = parseInt(localStorage.getItem('opens') || 0);
+            opens++;
+            localStorage.setItem('opens', opens);
+
+            if (intent === 'Mindless scrolling') {
+                let mindless = parseInt(localStorage.getItem('mindless') || 0);
+                mindless++;
+                localStorage.setItem('mindless', mindless);
+            }
+
+            loadStats();
+        }
+
+        function openInstagram() {
+            window.location.href = 'instagram://';
+
+            setTimeout(() => {
+                window.location.href = 'https://instagram.com';
+            }, 1000);
+        }
+
+        function openX() {
+            window.location.href = 'x://';
+
+            setTimeout(() => {
+                window.location.href = 'https://x.com';
+            }, 1000);
+        }
 
 
-    function goBack() {
-      document.getElementById('reflectionBox').style.display = 'none';
-    }
+        function goBack() {
+            document.getElementById('reflectionBox').style.display = 'none';
+        }
 
-    loadStats();
-  </script>
+        loadStats();
+    </script>
 </body>
+
 </html>
