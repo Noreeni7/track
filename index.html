@@ -284,9 +284,9 @@
             if (intent === 'Mindless scrolling') {
                 const today = getTodayKey();
 
-                let opens = parseInt(localStorage.getItem(`opens_${today}`) || 0);
-                opens++;
-                localStorage.setItem(`opens_${today}`, opens);
+                let mindless = parseInt(localStorage.getItem(`mindless_${today}`) || 0);
+                mindless++;
+                localStorage.setItem(`mindless_${today}`, mindless);
             }
 
             loadStats();
