@@ -212,6 +212,7 @@
     </div>
 
     <script>
+        let hasCountedOpen = false;
         let countdownInterval;
 
         const reflections = [
@@ -277,9 +278,15 @@
 
             const today = getTodayKey();
 
-            let opens = parseInt(localStorage.getItem(`opens_${today}`) || 0);
-            opens++;
-            localStorage.setItem(`opens_${today}`, opens);
+            if (!hasCountedOpen) {
+                const today = getTodayKey();
+
+                let opens = parseInt(localStorage.getItem(`opens_${today}`) || 0);
+                opens++;
+                localStorage.setItem(`opens_${today}`, opens);
+
+                hasCountedOpen = true;
+            }
 
             if (intent === 'Mindless scrolling') {
                 const today = getTodayKey();
