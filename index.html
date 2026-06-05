@@ -329,26 +329,40 @@
         }
 
         function renderChart() {
-    const data = getLast7DaysData();
+            const data = getLast7DaysData();
 
-    const max = Math.max(...data.map(d => d.opens), 1);
+            const max = Math.max(...data.map(d => d.opens), 1);
 
-    let html = "";
+            let html = "";
 
-    data.forEach(d => {
-        const barLength = Math.round((d.opens / max) * 10);
-        const bars = "▇".repeat(barLength);
+            data.forEach(d => {
+                const mindless = d.mindless;
+                const intentional = Math.max(d.opens - mindless, 0);
 
-        html += `
-            <div style="display:flex; justify-content:space-between; margin:4px 0; font-size:0.85rem;">
+                const totalBars = 10;
+
+                const mindlessBars = Math.round((mindless / max) * totalBars);
+                const intentionalBars = Math.round((intentional / max) * totalBars);
+
+                const green = "🟩".repeat(intentionalBars);
+                const red = "🟥".repeat(mindlessBars);
+
+                html += `
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                font-size:0.85rem;
+                margin:4px 0;
+                align-items:center;
+            ">
                 <span style="color:#94a3b8;">${d.day}</span>
-                <span style="color:#22c55e;">${bars || "·"}</span>
+                <span>${green}${red || "·"}</span>
             </div>
         `;
-    });
+            });
 
-    document.getElementById("chart").innerHTML = html;
-}
+            document.getElementById("chart").innerHTML = html;
+        }
 
         function openInstagram() {
             window.location.href = 'instagram://';
