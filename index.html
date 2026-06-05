@@ -336,13 +336,13 @@
     let html = "";
 
     data.forEach(d => {
-        const bars = Math.round((d.opens / max) * 10); // scale to 10 blocks
-        const bar = "▇".repeat(bars);
+        const barLength = Math.round((d.opens / max) * 10);
+        const bars = "▇".repeat(barLength);
 
         html += `
-            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin:4px 0;">
+            <div style="display:flex; justify-content:space-between; margin:4px 0; font-size:0.85rem;">
                 <span style="color:#94a3b8;">${d.day}</span>
-                <span style="color:#22c55e;">${bar}</span>
+                <span style="color:#22c55e;">${bars || "·"}</span>
             </div>
         `;
     });
