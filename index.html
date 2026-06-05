@@ -191,6 +191,10 @@
                 Continue to X
             </button>
 
+            <button class="continue-btn" id="whatsAppBtn" onclick="openwhatsApp()">
+                Continue to whatsApp
+            </button>
+
             <button class="back-btn" id="backBtn" onclick="goBack()">
                 Never mind
             </button>
@@ -238,6 +242,7 @@
 
             document.getElementById('instagramBtn').style.display = 'none';
             document.getElementById('xBtn').style.display = 'none';
+            document.getElementById('whatsAppBtn').style.display = 'none';
             document.getElementById('backBtn').style.display = 'none';
 
             clearInterval(countdownInterval);
@@ -254,6 +259,7 @@
 
                     document.getElementById('instagramBtn').style.display = 'block';
                     document.getElementById('xBtn').style.display = 'block';
+                    document.getElementById('whatsAppBtn').style.display = 'block';
                     document.getElementById('backBtn').style.display = 'block';
                     document.getElementById('backBtn').style.display = 'block';
                 }
@@ -285,6 +291,14 @@
 
             setTimeout(() => {
                 window.location.href = 'https://x.com';
+            }, 1000);
+        }
+
+        function openwhatsApp() {
+            window.location.href = 'whatsApp://';
+
+            setTimeout(() => {
+                window.location.href = 'https://whatsApp.com';
             }, 1000);
         }
 
