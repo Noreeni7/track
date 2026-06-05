@@ -334,10 +334,10 @@
     let html = "";
 
     data.forEach(d => {
+        const total = d.opens || 1;
+
         const intentional = Math.max(d.opens - d.mindless, 0);
         const mindless = d.mindless;
-
-        const total = d.opens || 1;
 
         const scale = 10;
 
@@ -345,7 +345,13 @@
         const redBars = Math.round((mindless / total) * scale);
 
         html += `
-            <div style="display:flex; justify-content:space-between; margin:4px 0; font-size:0.85rem;">
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                font-size:0.85rem;
+                margin:4px 0;
+                align-items:center;
+            ">
                 <span style="color:#94a3b8;">${d.day}</span>
                 <span>
                     <span style="color:#22c55e;">${"▇".repeat(greenBars)}</span>
