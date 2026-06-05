@@ -329,34 +329,26 @@
         }
 
         function renderChart() {
-            const data = getLast7DaysData();
+    const data = getLast7DaysData();
 
-            const chartData = {
-                chartType: "line",
-                meta: {
-                    title: "7-Day App Opens",
-                    description: "Daily intentional vs mindless usage"
-                },
-                xKey: "day",
-                xAxisLabel: "Day",
-                series: [
-                    {
-                        dataKey: "opens",
-                        label: "Total Opens",
-                        valueFormat: "integer"
-                    },
-                    {
-                        dataKey: "mindless",
-                        label: "Mindless Opens",
-                        valueFormat: "integer"
-                    }
-                ],
-                data: data
-            };
+    const max = Math.max(...data.map(d => d.opens), 1);
 
-            document.getElementById("chart").innerHTML =
-                ``;
-        }
+    let html = "";
+
+    data.forEach(d => {
+        const bars = Math.round((d.opens / max) * 10); // scale to 10 blocks
+        const bar = "▇".repeat(bars);
+
+        html += `
+            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin:4px 0;">
+                <span style="color:#94a3b8;">${d.day}</span>
+                <span style="color:#22c55e;">${bar}</span>
+            </div>
+        `;
+    });
+
+    document.getElementById("chart").innerHTML = html;
+}
 
         function openInstagram() {
             window.location.href = 'instagram://';
