@@ -329,40 +329,34 @@
         }
 
         function renderChart() {
-            const data = getLast7DaysData();
+    const data = getLast7DaysData();
 
-            const max = Math.max(...data.map(d => d.opens), 1);
+    let html = "";
 
-            let html = "";
+    data.forEach(d => {
+        const intentional = Math.max(d.opens - d.mindless, 0);
+        const mindless = d.mindless;
 
-            data.forEach(d => {
-                const mindless = d.mindless;
-                const intentional = Math.max(d.opens - mindless, 0);
+        const total = d.opens || 1;
 
-                const totalBars = 10;
+        const scale = 10;
 
-                const mindlessBars = Math.round((mindless / max) * totalBars);
-                const intentionalBars = Math.round((intentional / max) * totalBars);
+        const greenBars = Math.round((intentional / total) * scale);
+        const redBars = Math.round((mindless / total) * scale);
 
-                const green = "🟩".repeat(intentionalBars);
-                const red = "🟥".repeat(mindlessBars);
-
-                html += `
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                font-size:0.85rem;
-                margin:4px 0;
-                align-items:center;
-            ">
+        html += `
+            <div style="display:flex; justify-content:space-between; margin:4px 0; font-size:0.85rem;">
                 <span style="color:#94a3b8;">${d.day}</span>
-                <span>${green}${red || "·"}</span>
+                <span>
+                    <span style="color:#22c55e;">${"▇".repeat(greenBars)}</span>
+                    <span style="color:#ef4444;">${"▇".repeat(redBars)}</span>
+                </span>
             </div>
         `;
-            });
+    });
 
-            document.getElementById("chart").innerHTML = html;
-        }
+    document.getElementById("chart").innerHTML = html;
+}
 
         function openInstagram() {
             window.location.href = 'instagram://';
