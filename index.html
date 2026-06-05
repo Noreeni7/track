@@ -172,6 +172,12 @@
                 Opens: <span id="openCount">0</span><br>
                 Mindless selections: <span id="mindlessCount">0</span>
             </div>
+
+            <div class="stats">
+                <strong>7-Day Trend</strong>
+                <div id="chart"></div>
+            </div>
+
         </div>
 
         <div class="reflection-box" id="reflectionBox">
@@ -224,6 +230,8 @@
 
             document.getElementById('openCount').innerText = opens;
             document.getElementById('mindlessCount').innerText = mindless;
+
+            renderChart();
         }
 
         function startFlow(intent) {
@@ -284,6 +292,65 @@
             loadStats();
         }
 
+        function getTodayKey() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function getDateNDaysAgo(n) {
+            const d = new Date();
+            d.setDate(d.getDate() - n);
+            return d.toISOString().split('T')[0];
+        }
+
+        function getLast7DaysData() {
+            let data = [];
+
+            for (let i = 6; i >= 0; i--) {
+                const date = getDateNDaysAgo(i);
+
+                const opens = parseInt(localStorage.getItem(`opens_${date}`) || 0);
+                const mindless = parseInt(localStorage.getItem(`mindless_${date}`) || 0);
+
+                data.push({
+                    day: date.slice(5), // shows "06-05"
+                    opens,
+                    mindless
+                });
+            }
+
+            return data;
+        }
+
+        function renderChart() {
+            const data = getLast7DaysData();
+
+            const chartData = {
+                chartType: "line",
+                meta: {
+                    title: "7-Day App Opens",
+                    description: "Daily intentional vs mindless usage"
+                },
+                xKey: "day",
+                xAxisLabel: "Day",
+                series: [
+                    {
+                        dataKey: "opens",
+                        label: "Total Opens",
+                        valueFormat: "integer"
+                    },
+                    {
+                        dataKey: "mindless",
+                        label: "Mindless Opens",
+                        valueFormat: "integer"
+                    }
+                ],
+                data: data
+            };
+
+            document.getElementById("chart").innerHTML =
+                ``;
+        }
+
         function openInstagram() {
             window.location.href = 'instagram://';
 
@@ -320,9 +387,7 @@
 
         loadStats();
 
-        function getTodayKey() {
-            return new Date().toISOString().split('T')[0];
-        }
+
 
     </script>
 </body>
