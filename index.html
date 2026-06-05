@@ -295,12 +295,17 @@
         }
 
         function openWhatsApp() {
-            window.location.href = 'whatsapp://';
+    const appUrl = "whatsapp://send";
+    const webUrl = "https://wa.me/";
 
-            setTimeout(() => {
-                window.location.href = 'https://whatsapp.com';
-            }, 1000);
+    document.location = appUrl;
+
+    setTimeout(() => {
+        if (document.visibilityState === "visible") {
+            document.location = webUrl;
         }
+    }, 2000);
+}
 
 
         function goBack() {
