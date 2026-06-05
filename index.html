@@ -217,8 +217,10 @@
         ];
 
         function loadStats() {
-            const opens = localStorage.getItem('opens') || 0;
-            const mindless = localStorage.getItem('mindless') || 0;
+            const today = getTodayKey();
+
+            const opens = localStorage.getItem(`opens_${today}`) || 0;
+            const mindless = localStorage.getItem(`mindless_${today}`) || 0;
 
             document.getElementById('openCount').innerText = opens;
             document.getElementById('mindlessCount').innerText = mindless;
@@ -265,14 +267,18 @@
                 }
             }, 1000);
 
-            let opens = parseInt(localStorage.getItem('opens') || 0);
+            const today = getTodayKey();
+
+            let opens = parseInt(localStorage.getItem(`opens_${today}`) || 0);
             opens++;
-            localStorage.setItem('opens', opens);
+            localStorage.setItem(`opens_${today}`, opens);
 
             if (intent === 'Mindless scrolling') {
-                let mindless = parseInt(localStorage.getItem('mindless') || 0);
-                mindless++;
-                localStorage.setItem('mindless', mindless);
+                const today = getTodayKey();
+
+                let opens = parseInt(localStorage.getItem(`opens_${today}`) || 0);
+                opens++;
+                localStorage.setItem(`opens_${today}`, opens);
             }
 
             loadStats();
@@ -295,17 +301,17 @@
         }
 
         function openWhatsApp() {
-    const appUrl = "whatsapp://send";
-    const webUrl = "https://wa.me/";
+            const appUrl = "whatsapp://send";
+            const webUrl = "https://wa.me/";
 
-    document.location = appUrl;
+            document.location = appUrl;
 
-    setTimeout(() => {
-        if (document.visibilityState === "visible") {
-            document.location = webUrl;
+            setTimeout(() => {
+                if (document.visibilityState === "visible") {
+                    document.location = webUrl;
+                }
+            }, 2000);
         }
-    }, 2000);
-}
 
 
         function goBack() {
@@ -313,6 +319,11 @@
         }
 
         loadStats();
+
+        function getTodayKey() {
+            return new Date().toISOString().split('T')[0];
+        }
+
     </script>
 </body>
 
